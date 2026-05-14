@@ -261,8 +261,8 @@
         <div class="header-content">
             <a href="/" class="logo">📸 Блог</a>
             <div class="nav">
-                <div class="profile-icon" onclick="toggleProfileModal()">
-                    <span>👤</span>
+                <div class="profile-icon">
+                    <a asp-controller="Home" asp-action="Profile"><img class="author-avatar" src="@Model[0].Autor.ImagePath"/></a>
                 </div>
             </div>
         </div>
