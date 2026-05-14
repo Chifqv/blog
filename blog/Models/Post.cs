@@ -5,13 +5,13 @@
         public Guid Id { get; set; }
         public string Description { get; set; }
         public string ImagePath { get; set; }
-        public string AutorId { get; set; }
+        public User Autor { get; set; }
 
-        public Post(string description, string imagePath, string autorId)
+        public Post(string description, string imagePath, User autor)
         {
             Description = description;
             ImagePath = imagePath;
-            AutorId = autorId;
+            Autor = autor;
             Id = new Guid();
         }
     }

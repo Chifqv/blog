@@ -15,7 +15,14 @@ namespace blog.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            User user = new User("Eli", "eli@mail.ru", "00");
+            List<Post> posts = new List<Post>() { 
+            new Post("hi!","https://avatars.mds.yandex.net/i?id=ee144099594ad4bd83755a6a556ba3a4_l-5088988-images-thumbs&n=13",user),
+            new Post("hi!","https://avatars.mds.yandex.net/i?id=ee144099594ad4bd83755a6a556ba3a4_l-5088988-images-thumbs&n=13",user),
+            new Post("hi!","https://avatars.mds.yandex.net/i?id=ee144099594ad4bd83755a6a556ba3a4_l-5088988-images-thumbs&n=13",user)
+            };
+
+            return View(posts);
         }
 
         public IActionResult Privacy()

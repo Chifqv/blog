@@ -1,8 +1,348 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model List<Post>
+
+@{
+    Layout = null;
+    ViewData["Title"] = "Мой блог";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Hiii</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: #fafafa;
+            color: #262626;
+        }
+
+        /* Хедер в стиле Instagram */
+        .header {
+            background: white;
+            border-bottom: 1px solid #dbdbdb;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 935px;
+            margin: 0 auto;
+            padding: 0 20px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 600;
+            background: linear-gradient(45deg, #f09433, #d62976, #962fbf);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-decoration: none;
+        }
+
+        .nav {
+            display: flex;
+            gap: 22px;
+            align-items: center;
+        }
+
+        .nav-icon {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 8px;
+            transition: opacity 0.2s;
+        }
+
+            .nav-icon:hover {
+                opacity: 0.6;
+            }
+
+        .profile-icon {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #f09433, #d62976, #962fbf);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+            .profile-icon:hover {
+                transform: scale(1.05);
+            }
+
+            .profile-icon span {
+                font-size: 16px;
+            }
+
+        /* Основной контент - лента */
+        .main-container {
+            max-width: 935px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+
+        /* Лента постов */
+        .feed {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Карточка поста (как в Instagram) */
+        .post {
+            background: white;
+            border: 1px solid #dbdbdb;
+            border-radius: 8px;
+            margin-bottom: 24px;
+        }
+
+        /* Шапка поста */
+        .post-header {
+            padding: 14px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .post-author {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .author-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #f09433, #d62976, #962fbf);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .author-name {
+            font-weight: 600;
+            font-size: 14px;
+            text-decoration: none;
+            color: #262626;
+        }
+
+        .post-menu {
+            font-size: 20px;
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        /* Изображение поста */
+        .post-image-container {
+            background: #fafafa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 400px;
+        }
+
+        .post-image {
+            width: 100%;
+            max-height: 600px;
+            object-fit: cover;
+        }
+
+        .image-placeholder {
+            width: 100%;
+            min-height: 400px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 48px;
+        }
+
+        /* Кнопки действий */
+        .post-actions {
+            padding: 8px 16px 4px;
+            display: flex;
+            gap: 16px;
+        }
+
+        .action-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 8px;
+            transition: transform 0.2s;
+        }
+
+            .action-btn:hover {
+                transform: scale(1.05);
+            }
+
+        /* Лайки */
+        .post-likes {
+            padding: 0 16px;
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        /* Описание поста */
+        .post-description {
+            padding: 0 16px;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .description-author {
+            font-weight: 600;
+            margin-right: 6px;
+        }
+
+        .description-text {
+            font-weight: normal;
+        }
+
+        /* Комментарии */
+        .post-comments {
+            padding: 0 16px;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: #8e8e8e;
+        }
+
+        /* Время поста */
+        .post-time {
+            padding: 0 16px 16px;
+            font-size: 10px;
+            color: #8e8e8e;
+            text-transform: uppercase;
+            letter-spacing: 0.2px;
+        }
+
+        /* Если нет постов */
+        .empty-feed {
+            text-align: center;
+            padding: 60px 20px;
+            background: white;
+            border: 1px solid #dbdbdb;
+            border-radius: 8px;
+        }
+
+            .empty-feed h3 {
+                margin-bottom: 16px;
+                color: #262626;
+            }
+    </style>
+</head>
+<body>
+
+    <!-- Хедер -->
+    <header class="header">
+        <div class="header-content">
+            <a href="/" class="logo">📸 Блог</a>
+            <div class="nav">
+                <div class="profile-icon" onclick="toggleProfileModal()">
+                    <span>👤</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Основная лента -->
+    <div class="main-container">
+        <div class="feed">
+            @if (Model != null && Model.Any())
+            {
+                foreach (var post in Model)
+                {
+                    <div class="post">
+                        <!-- Шапка поста -->
+                        <div class="post-header">
+                            <div class="post-author">
+                                <div class="author-avatar">
+                                    {
+                                    <img class="author-avatar" src="@post.Autor.ImagePath" alt="Аватар" />
+                                    }
+                                </div>
+                                <a href="#" class="author-name">@post.Autor.Name</a>
+                            </div>
+                            <div class="post-menu" onclick="alert('Меню поста')">⋯</div>
+                        </div>
+
+                        <!-- Изображение поста -->
+                        <div class="post-image-container">
+                            @if (!string.IsNullOrEmpty(post.ImagePath))
+                            {
+                                <img class="post-image" src="@post.ImagePath" alt="Пост" />
+                            }
+                            else
+                            {
+                                <div class="image-placeholder">
+                                    📷
+                                </div>
+                            }
+                        </div>
+
+                        <!-- Кнопки действий -->
+                        <div class="post-actions">
+                            <button class="action-btn" onclick="alert('Лайк!')">❤️</button>
+                            <button class="action-btn" onclick="alert('Комментарий')">💬</button>
+                        </div>
+
+                        <!-- Лайки -->
+                        <div class="post-likes">
+                            ❤️ @Random.Shared.Next(100, 5000) отметок "Нравится"
+                        </div>
+
+                        <!-- Описание -->
+                        <div class="post-description">
+                            <span class="description-author">@post.Autor.Name</span>
+                            <span class="description-text">
+                                @(post.Description.Length > 200 ? post.Description.Substring(0, 200) + "..." : post.Description)
+                            </span>
+                        </div>
+
+                        <!-- Комментарии -->
+                        <div class="post-comments" onclick="alert('Посмотреть все комментарии')">
+                            Посмотреть все @Random.Shared.Next(1, 50) комментариев
+                        </div>
+
+                        <!-- Время -->
+                        <div class="post-time">
+                            2 ЧАСА НАЗАД
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="empty-feed">
+                    <h3>📷 Нет постов</h3>
+                    <p>Будьте первым, кто добавит пост в ленту!</p>
+                </div>
+            }
+        </div>
+    </div>
+
+</body>
+</html>
