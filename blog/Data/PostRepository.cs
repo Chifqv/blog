@@ -22,5 +22,9 @@ namespace blog.Data
         {
             return posts.Where(x => x.Autor == autor).ToList();
         }
+        public Post? TryGetById(Guid id)
+        {
+            return posts.FirstOrDefault(x => x.Id == id);
+        }
     }
 }
