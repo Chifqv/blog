@@ -1,20 +1,24 @@
-using System.Diagnostics;
+using blog.Data;
 using blog.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Text.Json;
 
 namespace blog.Controllers
 {
     public class HomeController : Controller
     {
+        PostRepository postRepository;
 
+        public HomeController(PostRepository postrep)
+        {
+            this.postRepository = postrep;
+        }
         public IActionResult Index()
         {
-            User user = new User("Eli", "eli@mail.ru", "00");
-            List<Post> posts = new List<Post>() { 
-            new Post("hi!","https://avatars.mds.yandex.net/i?id=ee144099594ad4bd83755a6a556ba3a4_l-5088988-images-thumbs&n=13",user),
-            new Post("hi!","https://avatars.mds.yandex.net/i?id=ee144099594ad4bd83755a6a556ba3a4_l-5088988-images-thumbs&n=13",user),
-            new Post("hi!","https://avatars.mds.yandex.net/i?id=ee144099594ad4bd83755a6a556ba3a4_l-5088988-images-thumbs&n=13",user)
-            };
+            
+            var posts = postRepository.GetAll();
 
             return View(posts);
         }
