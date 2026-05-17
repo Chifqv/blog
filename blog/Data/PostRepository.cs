@@ -11,6 +11,11 @@ namespace blog.Data
         {
             string jsonString = File.ReadAllText("Data/Posts.json");
             posts = JsonSerializer.Deserialize<List<Post>>(jsonString);
+
+            foreach(var post in posts)
+            {
+                post.Id = Guid.NewGuid();
+            }
         }
 
         public List<Post> GetAll()

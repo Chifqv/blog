@@ -32,5 +32,15 @@ namespace blog.Controllers
         {
             return View();
         }
+
+
+        [HttpPost]
+        public JsonResult IncrementLikes(Guid id)
+        {
+            Post post = postRepository.TryGetById(id);
+            post.Likes++;
+
+            return Json(new { newLikes = post.Likes });
+        }
     }
 }
