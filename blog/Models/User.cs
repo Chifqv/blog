@@ -8,7 +8,7 @@
         public Guid Id { get; set; }
         public string ImagePath { get; set; }
 
-        public User(string name, string email, string password, string imagePath)
+        public User(string name, string email, string password, string imagePath = "/images/baseUser.jpg")
         {
             Name = name;
             Email = email;
