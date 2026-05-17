@@ -1,5 +1,4 @@
 ﻿@{
-    Layout = null;
     User profileUser = new User("Eli", "eli@mail.ru", "00");
     List<Post> posts = new List<Post>() {
             new Post("hi!","https://avatars.mds.yandex.net/i?id=ee144099594ad4bd83755a6a556ba3a4_l-5088988-images-thumbs&n=13",profileUser),
@@ -15,329 +14,13 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"]</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background: #fafafa;
-            color: #262626;
-        }
-
-        /* Хедер */
-        .header {
-            background: white;
-            border-bottom: 1px solid #dbdbdb;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .header-content {
-            max-width: 935px;
-            margin: 0 auto;
-            padding: 0 20px;
-            height: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .logo {
-            font-size: 24px;
-            font-weight: 600;
-            background: linear-gradient(45deg, #f09433, #d62976, #962fbf);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            text-decoration: none;
-        }
-
-        .nav {
-            display: flex;
-            gap: 22px;
-            align-items: center;
-        }
-
-        .nav-icon {
-            background: none;
-            border: none;
-            font-size: 24px;
-            cursor: pointer;
-            padding: 8px;
-            transition: opacity 0.2s;
-        }
-
-            .nav-icon:hover {
-                opacity: 0.6;
-            }
-
-        .profile-icon {
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            object-fit: cover;
-            cursor: pointer;
-            border: 1px solid #dbdbdb;
-        }
-
-        /* Основной контент */
-        .main-container {
-            max-width: 935px;
-            margin: 0 auto;
-            padding: 30px 20px;
-        }
-
-        /* Информация о профиле */
-        .profile-info {
-            display: flex;
-            gap: 50px;
-            margin-bottom: 44px;
-            flex-wrap: wrap;
-        }
-
-        .profile-avatar {
-            flex-shrink: 0;
-        }
-
-        .profile-avatar-img {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 3px solid #f09433;
-            padding: 3px;
-        }
-
-        .profile-avatar-placeholder {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            background: linear-gradient(45deg, #f09433, #d62976, #962fbf);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 64px;
-            color: white;
-        }
-
-        .profile-details {
-            flex: 1;
-        }
-
-        .profile-header {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-
-        .profile-username {
-            font-size: 28px;
-            font-weight: 300;
-        }
-
-        .edit-profile-btn, .follow-btn, .message-btn {
-            border: none;
-            padding: 7px 16px;
-            border-radius: 8px;
-            font-weight: 600;
-            font-size: 14px;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-
-        .edit-profile-btn {
-            background: #efefef;
-            color: #262626;
-        }
-
-            .edit-profile-btn:hover {
-                background: #dbdbdb;
-            }
-
-        .follow-btn {
-            background: #0095f6;
-            color: white;
-        }
-
-            .follow-btn:hover {
-                background: #0081d6;
-            }
-
-        .message-btn {
-            background: #efefef;
-            color: #262626;
-        }
-
-        .profile-stats {
-            display: flex;
-            gap: 40px;
-            margin-bottom: 20px;
-        }
-
-        .stat {
-            font-size: 16px;
-        }
-
-        .stat-number {
-            font-weight: 600;
-        }
-
-        .profile-bio {
-            margin-bottom: 10px;
-        }
-
-        .bio-name {
-            font-weight: 600;
-            margin-bottom: 5px;
-            font-size: 16px;
-        }
-
-        .bio-email {
-            color: #8e8e8e;
-            font-size: 14px;
-            margin-top: 5px;
-        }
-
-        /* Вкладки */
-        .profile-tabs {
-            display: flex;
-            justify-content: center;
-            gap: 60px;
-            border-top: 1px solid #dbdbdb;
-            margin-top: 20px;
-        }
-
-        .tab {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            padding: 16px 0;
-            background: none;
-            border: none;
-            font-size: 12px;
-            font-weight: 600;
-            letter-spacing: 1px;
-            cursor: pointer;
-            color: #8e8e8e;
-            transition: color 0.2s;
-            border-top: 1px solid transparent;
-            margin-top: -1px;
-        }
-
-            .tab.active {
-                color: #262626;
-                border-top-color: #262626;
-            }
-
-            .tab:hover {
-                color: #262626;
-            }
-
-        /* Сетка постов */
-        .posts-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 28px;
-            margin-top: 20px;
-        }
-
-        .post-item {
-            position: relative;
-            aspect-ratio: 1;
-            cursor: pointer;
-            background: #fafafa;
-            overflow: hidden;
-        }
-
-            .post-item img {
-                width: 100%;
-                height: 100%;
-                object-fit: cover;
-            }
-
-        .post-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0,0,0,0.5);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 30px;
-            opacity: 0;
-            transition: opacity 0.2s;
-            color: white;
-        }
-
-        .post-item:hover .post-overlay {
-            opacity: 1;
-        }
-
-        .overlay-stat {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-weight: 600;
-        }
-
-        /* Нет постов */
-        .empty-posts {
-            text-align: center;
-            padding: 60px 20px;
-            color: #8e8e8e;
-        }
-
-            .empty-posts h3 {
-                margin-bottom: 16px;
-                color: #262626;
-            }
-
-
-        .profile-stats {
-            justify-content: center;
-        }
-
-        .profile-header {
-            justify-content: center;
-        }
-
-        .posts-grid {
-            gap: 3px;
-        }
-
-        }
-    </style>
+    <link rel="stylesheet" href="/css/Profile.css" />
 </head>
 <body>
-
-    <!-- Хедер -->
-    <header class="header">
-        <div class="header-content">
-            <a href="/" class="logo">📸 Блог</a>
-            <div class="nav">
-                <div class="profile-icon">
-                    <a asp-controller="Home" asp-action="Profile"><img class="author-avatar" src="@profileUser.ImagePath" /></a>
-                </div>
-            </div>
-        </div>
-    </header>
-
-    <!-- Профиль -->
     <div class="main-container">
-        <!-- Информация о пользователе -->
         <div class="profile-info">
             <div class="profile-avatar">
-                <img class="profile-avatar-img" src="@profileUser.ImagePath"/>
+                <img class="profile-avatar-img" src="/images/baseUser.jpg" />
             </div>
 
             <div class="profile-details">
@@ -355,7 +38,6 @@
             </div>
         </div>
 
-        <!-- Вкладки -->
         <div class="profile-tabs">
             <button class="tab active" onclick="showTab('posts')">
                 ПУБЛИКАЦИИ
@@ -365,7 +47,6 @@
             </button>
         </div>
 
-        <!-- Сетка постов -->
         <div id="postsTab" class="posts-grid">
           
                 @foreach (var post in posts)
@@ -381,10 +62,6 @@
                                 📷
                             </div>
                         }
-                        <div class="post-overlay">
-                            <div class="overlay-stat">❤️</div>
-                            <div class="overlay-stat">💬</div>
-                        </div>
                     </div>
                 }
             
