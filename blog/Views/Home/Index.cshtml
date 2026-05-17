@@ -24,12 +24,12 @@
                             <div class="post-author">
                                 <div class="author-avatar">
                                     {
-                                    <img class="author-avatar" src="@post.Autor.ImagePath" alt="Аватар" />
+                                    <img class="author-avatar" src="@post.Autor.ImagePath" />
                                     }
                                 </div>
                                 <a href="#" class="author-name">@post.Autor.Name</a>
                             </div>
-                            <div class="post-menu" onclick="alert('Меню поста')">⋯</div>
+                            <div class="post-menu">⋯</div>
                         </div>
 
                         <div class="post-image-container">
@@ -46,12 +46,14 @@
                         </div>
 
                         <div class="post-actions">
-                            <button class="action-btn" onclick="alert('Лайк!')">❤️</button>
-                            <button class="action-btn" onclick="alert('Комментарий')">💬</button>
+                            @*<a class="action-btn" asp-controller="Home" asp-action="IncrementLikes" asp-route-id="@post.Id" role="button">❤️</a>
+ *@                            
+                            <button class="action-btn" id="like-button-@post.Id" onclick="likePost('@post.Id')" data-id="@post.Id">❤️</button>
+                            <button class="action-btn">💬</button>
                         </div>
 
-                        <div class="post-likes">
-                            ❤️ @Random.Shared.Next(100, 5000) отметок "Нравится"
+                        <div class="post-likes" id="like-count-@post.Id">
+                            ❤️ @post.Likes отметок "Нравится"
                         </div>
 
                         <div class="post-description">
@@ -61,12 +63,12 @@
                             </span>
                         </div>
 
-                        <div class="post-comments" onclick="alert('Посмотреть все комментарии')">
+                        <div class="post-comments">
                             Посмотреть все @Random.Shared.Next(1, 50) комментариев
                         </div>
 
                         <div class="post-time">
-                            2 ЧАСА НАЗАД
+                            @post.Created;
                         </div>
                     </div>
                 }
@@ -80,6 +82,23 @@
             }
         </div>
     </div>
+    <script>
+          async function likePost(postId) {
+              const btn = document.getElementById(`like-button-${postId}`);
+              btn.disabled = true;
+              console.log("1111");
+              const response = await fetch('@Url.Action("IncrementLikes", "Home")', {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/x-www-form-urlencoded",
+                },
+                body: new URLSearchParams({ id: postId }),
+              });
 
+              const data = await response.json();
+              document.getElementById(`like-count-${postId}`).innerText =  `❤️ ${data.newLikes} отметок "Нравится"`;
+              btn.disabled = false;
+        }
+    </script>
 </body>
 </html>
